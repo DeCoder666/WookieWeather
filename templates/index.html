@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;800&display=swap" rel="stylesheet">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{{cityName}}</title>
+  </head>
+  <body>
+    <p class="topText" id="topText">Error</p>
+    <div>
+    	<p id="centralText" class="left c">It's like</p>
+    	<br>
+    	<p id="planetText" class="center c"><b>{{planetType}}</b></p>
+    	<br>
+    	<p id="centralText1" class="right c">out there!</p>
+    </div>
+
+    <div class="topcorner">
+    	<!-- <input id="toggle-two" type="checkbox" data-toggle="toggle" data-on="Celsius" data-off="Fahrenheit"> -->
+        
+    	<!-- Rounded switch -->
+        <p id="tt" class="topText" style="float: left; margin-right: 10px; ">°C</p> <!-- Rectangular switch -->
+        <!-- Rounded switch -->
+        <label class="switch">
+          <input onclick="myFunction()" type="checkbox">
+          <span class="slider round"></span>
+        </label> <p id="tt1" class="topText" style="float: right; margin-left: 10px;">°F</p>
+    </div>
+
+    <div class="bottomcorner">
+        <div class="topText" id="cityText" style="float: left; position: absolute; right: 200px;"><p style="white-space: nowrap;
+          overflow: hidden; font-weight: bold; float: left; position: absolute; right: 360px; top: 3px">Choose City</p>
+            <form action="/" method="POST">
+                <input type="text" name="cityName" placeholder="e.g New York" style="width: 230px; position: absolute; right: 120px; color: black;">
+                <input type="submit" name="submit" style="color: black">
+            </form>
+      
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        if ({{isCityValid}} == false){
+            alert("Invalid location!");
+        }
+
+
+        var planetType = ""
+        if ({{current_temperature}} > 50)
+            planetType = "Mustafar";
+        else if ({{current_temperature}} > 35)
+            planetType = "Tatooine";
+        else if ({{current_temperature}} > 20)
+            planetType = "Alderaan";
+        else if ({{current_temperature}} > 10)
+            planetType = "Endor";
+        else if  ({{current_temperature}} <= 10)
+            planetType = "Hoth";
+        current_temperature = {{current_temperature}};
+
+        //tempText = format(current_temperature, ".1f") + "°C";
+        /*var tempText = {{current_temperature}} * 1.8 + 32
+        tempText = Math.floor(tempText * 100) / 100 + "°C"*/
+
+        var tempText = Math.floor(current_temperature * 10) / 10 + "°C";
+
+        temperatureDescription = ["Yikes! It's " + tempText + ",{{weather_description}}?",
+         "Gosh! It's " + tempText + ", {{weather_description}}" + "?",
+         "What a beautiful day! It's " + tempText + ", {{weather_description}}" + "?",
+         "Woah, it's " + tempText + ", {{weather_description}}" + "?"];
+        temperatureText = temperatureDescription[Math.floor(Math.random() * 4)];
+
+        document.getElementById("topText").innerHTML = temperatureText;
+
+        function adjustColor(color){
+            //0 - black, 1 - white
+            if(color == 1){
+                document.getElementById("planetText").style.color = "#FFFFFF";
+                document.getElementById("centralText").style.color = "#FFFFFF";
+                document.getElementById("centralText1").style.color = "#FFFFFF";
+                document.getElementById("topText").style.color = "#FFFFFF";
+                document.getElementById("tt").style.color = "#FFFFFF";
+                document.getElementById("tt1").style.color = "#FFFFFF";
+                document.getElementById("cityText").style.color = "#FFFFFF";
+            }else{
+                document.getElementById("planetText").style.color = "#333333"
+                document.getElementById("centralText").style.color = "#333333";
+                document.getElementById("centralText1").style.color = "#333333";
+                document.getElementById("topText").style.color = "#333333";
+                document.getElementById("tt").style.color = "#333333";
+                document.getElementById("tt1").style.color = "#333333";
+                document.getElementById("cityText").style.color = "#333333";
+            }
+        }
+        if("{{planetType}}" == "Mustafar"){
+            document.body.style.backgroundImage = "url('https://lumiere-a.akamaihd.net/v1/images/databank_mustafar_01_169_5b470758.jpeg?region=0%2C98%2C1560%2C780')";
+            adjustColor(1);
+        }else if("{{planetType}}" == "Alderaan"){
+            document.body.style.backgroundImage = "url('static/alderaan.jpg')";
+            adjustColor(1);
+        }else if("{{planetType}}" == "Tatooine"){
+            document.body.style.backgroundImage = "url('static/Tatooine.jpg')";
+            adjustColor(1);
+        }else if("{{planetType}}" == "Alderaan"){
+            document.body.style.backgroundImage = "url('static/alderaan.jpg')";
+            adjustColor(1);
+        }else if("{{planetType}}" == "Endor"){
+            document.body.style.backgroundImage = "url('static/endor.jpg')";
+            adjustColor(1);
+        }else if("{{planetType}}" == "Hoth"){
+            document.body.style.backgroundImage = "url('static/hoth.jpg')";
+            adjustColor(1);
+        }
+        var isCelcius = true;
+        function myFunction(){
+            
+            if(isCelcius == true){
+                /*var x = {{current_temperature}} * 1.8 + 32
+                x = Math.floor(x * 100) / 100;
+                document.getElementById("topText").innerHTML = x + "°F";*/
+                isCelcius = false;
+                //document.body.style.backgroundImage = "url('https://lumiere-a.akamaihd.net/v1/images/databank_mustafar_01_169_5b470758.jpeg?region=0%2C98%2C1560%2C780')";
+                //adjustColor(1);
+
+                var x = {{current_temperature}} * 1.8 + 32
+                var tempText1 = Math.floor(x * 10) / 10 + "°F";
+
+                var temperatureDescription1 = ["Yikes! It's " + tempText1 + ",{{weather_description}}?","Gosh! It's " + tempText1 + ", {{weather_description}}" + "?",
+                "What a beautiful day! It's " + tempText1 + ", {{weather_description}}" + "?",
+                "Woah, it's " + tempText1 + ", {{weather_description}}" + "?"];
+                var temperatureText1 = temperatureDescription1[Math.floor(Math.random() * 4)];
+                document.getElementById("topText").innerHTML = temperatureText1;
+            }else if(isCelcius == false){
+                document.getElementById("topText").innerHTML = "{{temperatureDescription}}";
+                isCelcius = true;
+                //document.body.style.backgroundImage = "url('https://wallpaperaccess.com/full/1603071.jpg')";
+                //adjustColor(0);
+                document.getElementById("topText").innerHTML = temperatureText;
+
+            }
+        }
+    </script>
+
+    <script src="{{ url_for ('static', filename='js/script.js')}}"></script>
+  </body>
+</html>
